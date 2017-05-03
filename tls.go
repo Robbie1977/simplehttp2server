@@ -109,7 +109,7 @@ func generateCertificates(host string) {
 	certOut.Close()
 	log.Print("written cert.pem\n")
 
-	keyOut, err := os.OpenFile("/certs/key.pem", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	keyOut, err := os.OpenFile("/certs/privkey.pem", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		log.Print("failed to open key.pem for writing:", err)
 		return
@@ -125,7 +125,7 @@ func configureTLS(server *http.Server) error {
 		generateCertificates("localhost")
 	}
 
-	cert, err := tls.LoadX509KeyPair("/certs/fullchain.pem", "/certs/key.pem")
+	cert, err := tls.LoadX509KeyPair("/certs/fullchain.pem", "/certs/privkey.pem")
 	if err != nil {
 		return err
 	}
