@@ -64,7 +64,7 @@ func (l *HijackHTTPListener) Accept() (net.Conn, error) {
 	}
 
 	// Otherwise it’s HTTPS
-	con.Write([]byte(fmt.Sprintf("HTTP/1.1 301 Moved Permanently\nLocation: https://%s/\n", *listen)))
+	con.Write([]byte(fmt.Sprintf("HTTP/1.1 301 Moved Permanently\nLocation: https://%s/\n", "data.virtualflybrain.org:5000")))
 	con.Close()
 	return con, nil
 }
