@@ -101,7 +101,7 @@ func generateCertificates(host string) {
 		log.Fatalf("Failed to create certificate: %s", err)
 	}
 
-	certOut, err := os.Create("cert.pem")
+	certOut, err := os.Create("/certs/fullchain.pem")
 	if err != nil {
 		log.Fatalf("failed to open cert.pem for writing: %s", err)
 	}
@@ -109,7 +109,7 @@ func generateCertificates(host string) {
 	certOut.Close()
 	log.Print("written cert.pem\n")
 
-	keyOut, err := os.OpenFile("key.pem", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	keyOut, err := os.OpenFile("/certs/key.pem", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		log.Print("failed to open key.pem for writing:", err)
 		return
@@ -120,12 +120,12 @@ func generateCertificates(host string) {
 }
 
 func configureTLS(server *http.Server) error {
-	if _, err := os.Stat("cert.pem"); err != nil {
+	if _, err := os.Stat("/certs/fullchain.pem"); err != nil {
 		log.Printf("Generating certificate...")
 		generateCertificates("localhost")
 	}
 
-	cert, err := tls.LoadX509KeyPair("cert.pem", "key.pem")
+	cert, err := tls.LoadX509KeyPair("/certs/fullchain.pem", "/certs/key.pem")
 	if err != nil {
 		return err
 	}
